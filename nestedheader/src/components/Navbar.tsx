@@ -9,11 +9,17 @@ import {
 import { useNavBar } from "./context/navItemsContext";
 
 
-const Navbar = () => {
-  const { items } = useNavBar()
+interface NavItem{
+  value: string;
+  label: string;
+  submenu?: NavItem[];
+}
 
-  const renderMenuItems = (i: MenuItem[]) => {
-    return i.map((item: any) => {
+const Navbar = () => {
+  const { items }: {items: NavItem[]} = useNavBar();
+
+  const renderMenuItems = (i: NavItem[]) => {
+    return i.map((item) => {
       if (item.submenu) {
         return (
           <Box>
@@ -36,7 +42,7 @@ const Navbar = () => {
 
   return (
     <Stack direction={'row'} style={{ backgroundColor: "#8b2121", width: "100%", height: "60px", display: "flex", alignItems: "center", padding: "0 16px" }}>
-      {items.map((item: any) => (
+      {items.map((item) => (
         <Box key={item.label} >
           {item.submenu ? (
             <MenuRoot>

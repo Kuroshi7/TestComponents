@@ -7,18 +7,21 @@ export type MenuType={
 export interface MenuItem{
     label: string
     value: string
+    url: string
     submenu?: Submenu[]
   }
   
   export interface Submenu {
     label: string
     value: string
+    url: string
     submenu?: Submenu2[]
   }
   
   export interface Submenu2 {
     label: string
     value: string
+    url: string
   }
 
 export const NavItemsContext = createContext <MenuType>({}as MenuType)
