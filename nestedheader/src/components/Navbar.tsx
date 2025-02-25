@@ -1,4 +1,4 @@
-import { Button } from "@chakra-ui/react";
+import { Box, Button, Stack } from "@chakra-ui/react";
 import {
   MenuContent,
   MenuItem,
@@ -6,33 +6,24 @@ import {
   MenuTrigger,
   MenuTriggerItem,
 } from "../components/ui/menu";
+import { useNavBar } from "./context/navItemsContext";
+
 
 const Navbar = () => {
-  const menuItems = [
-    {
-      label: "Services", value: "services", submenu: [
-        { label: "Web Development", value: "web-development" },
-        { label: "App Development", value: "app-development", submenu: [
-          { label: "iOS Development", value: "ios-development" },
-          { label: "Android Development", value: "android-development" },
-          { label: "Cross-platform", value: "cross-platform" },
-        ]},
-        { label: "SEO Optimization", value: "seo" },
-      ]
-    },
-    { label: "About", value: "about" },
-  ];
+  const { items } = useNavBar()
 
-  const renderMenuItems = (items) => {
-    return items.map((item) => {
+  const renderMenuItems = (i: MenuItem[]) => {
+    return i.map((item: any) => {
       if (item.submenu) {
         return (
-          <MenuRoot key={item.value} positioning={{ placement: "right-start", gutter: 2 }}>
-            <MenuTriggerItem value={item.value}>{item.label}</MenuTriggerItem>
-            <MenuContent>
-              {renderMenuItems(item.submenu)}
-            </MenuContent>
-          </MenuRoot>
+          <Box>
+            <MenuRoot key={item.value} positioning={{ placement: "right-start", gutter: 2 }}>
+              <MenuTriggerItem value={item.value}>{item.label}</MenuTriggerItem>
+              <MenuContent>
+                {renderMenuItems(item.submenu)}
+              </MenuContent>
+            </MenuRoot>
+          </Box>
         );
       }
       return (
@@ -44,21 +35,28 @@ const Navbar = () => {
   };
 
   return (
-    <div style={{ backgroundColor: "#e53e3e", width: "100%", height: "60px", display: "flex", alignItems: "center", padding: "0 16px" }}>
-      <Button variant="outline" size="sm" onClick={() => window.location.href = '/about'}>
-        About
-      </Button>
-      <MenuRoot>
-        <MenuTrigger asChild>
-          <Button variant="outline" size="sm">
-            Services
-          </Button>
-        </MenuTrigger>
-        <MenuContent>
-          {renderMenuItems(menuItems)}
-        </MenuContent>
-      </MenuRoot>
-    </div>
+    <Stack direction={'row'} style={{ backgroundColor: "#8b2121", width: "100%", height: "60px", display: "flex", alignItems: "center", padding: "0 16px" }}>
+      {items.map((item: any) => (
+        <Box key={item.label} >
+          {item.submenu ? (
+            <MenuRoot>
+              <MenuTrigger asChild>
+                <Button variant="outline" size="sm">
+                  {item.label}
+                </Button>
+              </MenuTrigger>
+              <MenuContent>
+                {item.submenu && renderMenuItems(item.submenu)}
+              </MenuContent>
+            </MenuRoot>
+          ) : (
+            <Button variant={'outline'} size={'sm'}>
+              {item.label}
+            </Button>
+          )}
+        </Box>
+      ))}
+    </Stack>
   );
 };
 
