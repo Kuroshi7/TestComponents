@@ -1,4 +1,4 @@
-import { Children, ReactNode } from "react";
+import { ReactNode } from "react";
 import { MenuType, NavItemsContext } from "../context/navItemsContext";
 
 type NavBarProviderType = {
